@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.misc import toimage
 from sklearn import linear_model
+from numpy import linalg as LA
 
 x_train = []
 y_train = []
@@ -55,9 +56,27 @@ for i in range(len(x_test)):
 # print "x"
 # print x_train[1]
 
-u, s, v = np.linalg.svd(x_train, full_matrices=True)
+x = np.reshape(x_train, (540, 2500))
 
-#print v.shape
+u, s, v = np.linalg.svd(x, full_matrices=False)
+
+##showing v[i] eignface
+
+# new_image = []
+# vimage  = np.zeros((10, 2500))
+
+
+# for i in range(10):
+#
+#     q = np.reshape(v[i], (50, 50))
+#
+#     new_image.append(q)
+#     vimage[i] = v[i]
+#
+# print "done"
+# new_im = toimage(np.reshape(vimage, (500, 50)))
+# new_im.save('test.bmp')
+
 #for i in range(0,1):
      #toimage(v[i]).show()
 #     plt.imshow(v[i], cmap='gray')
@@ -67,25 +86,36 @@ u, s, v = np.linalg.svd(x_train, full_matrices=True)
 x_r = []
 err = []
 
-
+#r approximation
 # for r in range(1,200):
 #     print r
-#     isum = 0
-#     for i in range(len(u)):
-#         tmp = np.matrix(u[i][:, :r]) * np.diag(s[i][:r]) * np.matrix(v[i][:r, :])
-#         #x_r.append(tmp)
-#         isum += (np.abs(tmp - x_train[i])).sum() / (len(tmp)*len(tmp))
-#     err.append(isum / 540)
+#     sigma = np.zeros((540, 540))
+#
+#     for i in range(r):
+#         sigma[i][i] = s[i]
+#
+#
+#     tmp = np.matmul(u, sigma)
+#     tmp2 = np.matmul(tmp, v)
+#
+#     err.append(LA.norm(tmp2 - x, 'fro'))
+#     xr = np.reshape(tmp2[1], (50, 50))
+
+    #toimage(xr).show()
+
+        #isum += (np.abs(tmp - x_train[i])).sum() / (len(tmp)*len(tmp))
+    #err.append(isum / 540)
+
 
 # plt.plot(err)
 # plt.show()
-# print err[80]
+# # print err[80]
 
 detection_err = []
-#for r in range(1, 150):
 
 
-r = 70
+r = 200
+#for r in range(1, 201):
 f = np.zeros((540, r))
 a = np.reshape(x_train, (540, 2500))
 b = np.reshape(v[0:r].T, (2500, r))
@@ -93,7 +123,6 @@ b = np.reshape(v[0:r].T, (2500, r))
 #print b[1]
 
 np.matmul(a, b, f)
-print "f"
 
 
 f_test = np.zeros((100, r))
@@ -102,7 +131,7 @@ a_test = np.reshape(x_test, (100, 2500))
 
 
 np.matmul(a_test, b, f_test)
-print f_test[1]
+
 
 
 logreg = linear_model.LogisticRegression(C=1e5)
@@ -117,8 +146,9 @@ for i in range(len(y_test)):
         sum += 1
 
 detection_err.append(sum)
+
 print sum
-print r
+
 
 # plt.plot(detection_err)
 # plt.show()
