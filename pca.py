@@ -4,7 +4,7 @@ from matplotlib.mlab import PCA as mlabPCA
 from sklearn.decomposition import PCA as sklearnPCA
 
 mean1 = [10, 10]
-mean2 = [22, 20]
+mean2 = [22, 10]
 cov = [[4, 4], [4, 9]]
 
 class1 = np.random.multivariate_normal(mean1, cov, 1000).T
@@ -31,11 +31,13 @@ plt.plot(mlab_pca.Y[1000:2000,0],'^', markersize=7, color='red', alpha=0.5, labe
 
 #plt.axis('equal')
 
-plt.figure(1)
 sklearn_pca = sklearnPCA(n_components=1)
 sklearn_transf = sklearn_pca.fit_transform(all_samples.T)
+plt.figure(3)
 
+plt.plot(sklearn_transf[0:1000,0],'o', markersize=7, color='blue', alpha=0.5, label='class1')
 
+plt.plot(sklearn_transf[1000:2000,0],'^', markersize=7, color='red', alpha=0.5, label='class2')
 #plt.plot(sklearn_transf[0:1000,0], 'x')
 #plt.plot(sklearn_transf[1000:2000,0], 'x')
 

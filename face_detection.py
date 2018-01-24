@@ -39,7 +39,7 @@ for line in test_content:
 
 avg /= len(x_train)
 #toimage(avg).show()
-
+print "here"
 #toimage(x_train[1]).show()
 
 for i in range(len(x_train)):
@@ -88,20 +88,21 @@ err = []
 
 #r approximation
 # for r in range(1,200):
-#     print r
-#     sigma = np.zeros((540, 540))
-#
-#     for i in range(r):
-#         sigma[i][i] = s[i]
-#
-#
-#     tmp = np.matmul(u, sigma)
-#     tmp2 = np.matmul(tmp, v)
-#
-#     err.append(LA.norm(tmp2 - x, 'fro'))
-#     xr = np.reshape(tmp2[1], (50, 50))
+r = 100
+sigma = np.zeros((540, 540))
 
-    #toimage(xr).show()
+for i in range(r):
+    sigma[i][i] = s[i]
+
+
+tmp = np.matmul(u, sigma)
+tmp2 = np.matmul(tmp, v)
+
+err.append(LA.norm(tmp2 - x, 'fro'))
+xr = np.reshape(tmp2[2], (50, 50))
+
+toimage(np.reshape(x[2], (50, 50))).show()
+toimage(xr).show()
 
         #isum += (np.abs(tmp - x_train[i])).sum() / (len(tmp)*len(tmp))
     #err.append(isum / 540)
